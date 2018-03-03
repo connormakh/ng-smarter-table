@@ -5,7 +5,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngIf="can_filter">
+  <tr *ngIf="_filter">
     <td *ngFor="let column of _columns">
       <input type="{{column.type}}">
     </td>

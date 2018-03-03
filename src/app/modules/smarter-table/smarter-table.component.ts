@@ -7,22 +7,30 @@ import {Component, OnInit, Input, OnChanges} from '@angular/core';
 })
 export class SmarterTableComponent implements OnInit, OnChanges {
 
-  can_filter = true
+  _filter = true
+  _sort = true
   data = []
-
   _columns = []
   _rows = []
+
   @Input() set columns(vall) {
     this._columns = vall
-
   }
 
-  @Input() set rows(value: array) {
+  @Input() set rows(value: any) {
     this._rows = value
   }
 
+  @Input() set filter(value: boolean) {
+    this._filter = value
+  }
+
+  @Input() set sort(value: boolean) {
+    this._sort = value
+  }
 
   constructor() {}
+
   ngOnInit() {
 
   }
@@ -44,4 +52,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     })
   }
 
+  runFilter() {
+
+  }
 }
