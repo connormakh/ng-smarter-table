@@ -52,7 +52,20 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     })
   }
 
-  runFilter() {
-
+  runSort(type, is_negative, field) {
+    switch (type) {
+      case 'number':
+        this._rows = this._rows.sort((a,b) => {
+          return is_negative ? b[field] - a[field]  : a[field] - b[field]
+        }
+        break
+      case 'text':
+        this._rows = this._rows.sort((a,b) => {
+          return is_negative ? b[field].toLowerCase() - a[field].toLowerCase()
+            : a[field].toLowerCase() - b[field].toLowerCase()
+        }
+        break
+    }
+    this.matchDataToColumns()
   }
 }
