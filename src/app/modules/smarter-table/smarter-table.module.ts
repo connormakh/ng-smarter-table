@@ -6,6 +6,7 @@ import { SmarterTableComponent } from './smarter-table.component';
   imports: [
     CommonModule
   ],
-  declarations: [SmarterTableComponent]
+  declarations: [SmarterTableComponent],
+  exports: [SmarterTableComponent]
 })
 export class SmarterTableModule { }
