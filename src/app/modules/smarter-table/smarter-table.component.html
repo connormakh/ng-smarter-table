@@ -1,3 +1,16 @@
-<p>
-  smarter-table works!
-</p>
+<table class="table">
+  <thead>
+  <tr>
+    <th *ngFor="let column of _columns">{{column.name}}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngIf="can_filter">
+    <td *ngFor="let column of _columns">
+      <input type="{{column.type}}">
+    </td>
+  </tr>
+  <tr *ngFor="let row of data">
+    <td *ngFor="let item of row">{{item}}</td>
+  </tr>
+  </tbody></table>
