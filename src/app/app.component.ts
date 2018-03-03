@@ -17,9 +17,9 @@ export class AppComponent {
     ]
 
   rows = [
-    {nums: 5, strs: 'yooyo', nums2: 33, nums3: 44, nums4: 55},
-    {nums: 5, strs: 'yooyo', nums2: 33, nums3: 44, nums4: 55},
-    {nums: 5, strs: 'yooyo', nums2: 33, nums3: 44, nums4: 55},
-    {nums: 5, strs: 'yooyo', nums2: 33, nums3: 44, nums4: 55}
+    {nums: 5, strs: 'yooyod', nums2: 33, nums3: 44, nums4: 55},
+    {nums: 5, strs: 'yooyoa', nums2: 32, nums3: 44, nums4: 55},
+    {nums: 5, strs: 'yooyog', nums2: 31, nums3: 44, nums4: 55},
+    {nums: 5, strs: 'yooyoge', nums2: 3, nums3: 4, nums4: 55}
   ]
 }

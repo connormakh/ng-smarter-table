@@ -1,7 +1,9 @@
 <table class="table">
   <thead>
   <tr>
-    <th *ngFor="let column of _columns">{{column.name}}</th>
+    <th *ngFor="let column of _columns; let i = index" (click)="prepareSort(i)">{{column.name}}
+      <i *ngIf="column['has_sort']" class="fa fa-fw fa-sort"></i>
+    </th>
   </tr>
   </thead>
   <tbody>
