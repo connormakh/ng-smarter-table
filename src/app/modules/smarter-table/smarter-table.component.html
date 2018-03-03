@@ -2,7 +2,8 @@
   <thead>
   <tr>
     <th *ngFor="let column of _columns; let i = index" (click)="prepareSort(i)">{{column.name}}
-      <i *ngIf="column['has_sort']" class="fa fa-fw fa-sort"></i>
+      <i *ngIf="column['has_sort'] && column['sort_is_negative']" class="fa fa-long-arrow-down"></i>
+      <i *ngIf="column['has_sort'] && !column['sort_is_negative']" class="fa fa-long-arrow-up"></i>
     </th>
   </tr>
   </thead>
