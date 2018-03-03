@@ -40,7 +40,8 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   }
 
   matchDataToColumns() {
-    this.data = this._rows.map(item => {
+    this.data = this._rows.map((item,i) => {
+      item['index'] = i + 1
       let row = new Array(this._columns.length)
       for (let col in item) {
         let index = this._columns.findIndex(item => {
@@ -80,6 +81,8 @@ export class SmarterTableComponent implements OnInit, OnChanges {
       this._columns[index]['has_sort'] = true
       this._columns[index]['sort_is_negative'] = false
     }
+
+    // TODO REVERT SORT TO ORIGINAL TABLE STRUC ON NO SORTS SELECTED
 
     this.runSort( this._columns[index]['type'],
                   this._columns[index]['sort_is_negative'],
