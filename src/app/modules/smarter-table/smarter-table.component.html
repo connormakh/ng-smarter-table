@@ -10,7 +10,15 @@
   <tbody>
   <tr *ngIf="_filter">
     <td *ngFor="let column of _columns">
-      <input type="{{column.type}}">
+      <div *ngIf="column.type == 'number'; then numberBlock; else otherTemp"></div>
+      <ng-template #numberBlock >
+        <input class="small-num" type="number">
+        to
+        <input class="small-num" type="number">
+      </ng-template>
+      <ng-template #otherTemp>
+        <input type="{{column.type}}">
+      </ng-template>
     </td>
   </tr>
   <tr *ngFor="let row of data">
