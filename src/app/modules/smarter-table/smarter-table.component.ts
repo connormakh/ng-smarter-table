@@ -61,8 +61,8 @@ export class SmarterTableComponent implements OnInit, OnChanges {
         break
       case 'text':
         this._rows = this._rows.sort((a,b) => {
-          return is_negative ? b[field].toLowerCase() - a[field].toLowerCase()
-            : a[field].toLowerCase() - b[field].toLowerCase()
+          return is_negative ? b[field].toLowerCase() > a[field].toLowerCase()
+            : a[field].toLowerCase() >  b[field].toLowerCase()
         })
         break
     }
