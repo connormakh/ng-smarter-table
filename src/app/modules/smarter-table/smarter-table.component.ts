@@ -115,7 +115,6 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   }
 
   applyFilter(filter, item) {
-    // let
     let cond = true
     for(let f in filter) {
       console.log(f)
@@ -134,7 +133,4 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     return cond
   }
 
-  binaryAnd(expr1, expr2) {
-    return expr1 && expr2
-  }
 }
