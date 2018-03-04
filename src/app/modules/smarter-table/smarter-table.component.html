@@ -12,12 +12,12 @@
     <td *ngFor="let column of _columns">
       <div *ngIf="column.type == 'number'; then numberBlock; else otherTemp"></div>
       <ng-template #numberBlock >
-        <input class="small-num" type="number" [(ngModel)]="column['min_num']" (change)="runFilter()">
+        <input class="small-num" type="number" [(ngModel)]="column['min_num']" (keyup)="runFilter()">
         to
-        <input class="small-num" type="number" [(ngModel)]="column['max_num']" (change)="runFilter()">
+        <input class="small-num" type="number" [(ngModel)]="column['max_num']" (keyup)="runFilter()">
       </ng-template>
       <ng-template #otherTemp>
-        <input type="{{column.type}}" [(ngModel)]="column['filter']" (change)="runFilter()">
+        <input type="{{column.type}}" [(ngModel)]="column['filter']" (keyup)="runFilter()">
       </ng-template>
     </td>
   </tr>
