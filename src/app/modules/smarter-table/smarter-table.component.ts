@@ -100,10 +100,12 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   runFilter() {
     let filter = {}
     for (let column of this._columns) {
+      console.log(column)
+
       if(column.type == 'number' && (column.min_num || column.max_num)) {
-        filter[column.name] = {min: column.min_num, max: column.max_num}
-      } else {
-        filter[column.name] = column.filter
+        filter[column.binder] = {min: column.min_num, max: column.max_num}
+      } else if(column.filter) {
+        filter[column.binder] = column.filter
       }
     }
     this._rows = this._initial_rows
@@ -116,9 +118,12 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     // let
     let cond = true
     for(let f in filter) {
+      console.log(f)
+      console.log(filter)
       if(typeof filter[f] == 'string') {
         cond = cond && item[f].includes(filter[f])
       } else {
+        console.log(filter[f])
         if(filter[f].min) {
           cond = cond && (parseInt(item[f]) > parseInt(filter[f].min))
         }
