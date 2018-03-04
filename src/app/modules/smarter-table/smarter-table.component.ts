@@ -12,6 +12,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   data = []
   _columns = []
   _rows = []
+  _initial_rows = []
 
   @Input() set columns(vall) {
     this._columns = vall
@@ -19,6 +20,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
 
   @Input() set rows(value: any) {
     this._rows = value
+    this._initial_rows = value
   }
 
   @Input() set filter(value: boolean) {
@@ -62,8 +64,14 @@ export class SmarterTableComponent implements OnInit, OnChanges {
         break
       case 'text':
         this._rows = this._rows.sort((a,b) => {
-          return is_negative ? b[field].toLowerCase() > a[field].toLowerCase()
-            : a[field].toLowerCase() >  b[field].toLowerCase()
+
+          if(is_negative) {
+
+          } else {
+
+          }
+          return is_negative ? (b[field].toLowerCase() > a[field].toLowerCase())?1:-1
+            : (a[field].toLowerCase() >  b[field].toLowerCase()?1:-1)
         })
         break
     }
@@ -87,5 +95,46 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     this.runSort( this._columns[index]['type'],
                   this._columns[index]['sort_is_negative'],
                   this._columns[index]['binder'])
+  }
+
+  runFilter() {
+    let filter = {}
+    for (let column of this._columns) {
+
+      if(column.type == 'number' && (column.min_num || column.max_num)) {
+        filter[column.binder] = {min: column.min_num, max: column.max_num}
+      } else if(column.filter) {
+        filter[column.binder] = column.filter
+      }
+    }
+    this._rows = this._initial_rows
+    this._rows = this._rows.filter(item => {
+      return this.applyFilter(filter, item)
+    })
+    this.matchDataToColumns()
+  }
+
+  applyFilter(filter, item) {
+    // let
+    let cond = true
+    for(let f in filter) {
+      console.log(f)
+      console.log(filter)
+      if(typeof filter[f] == 'string') {
+        cond = cond && item[f].includes(filter[f])
+      } else {
+        if(filter[f].min) {
+          cond = cond && (parseInt(item[f]) > parseInt(filter[f].min))
+        }
+        if(filter[f].max) {
+          cond = cond && (parseInt(item[f]) < parseInt(filter[f].max))
+        }
+      }
+    }
+    return cond
+  }
+
+  binaryAnd(expr1, expr2) {
+    return expr1 && expr2
   }
 }
