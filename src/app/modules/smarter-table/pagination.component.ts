@@ -20,8 +20,11 @@ export class PaginationComponent implements OnInit, OnChanges {
   constructor() {}
 
   change_page(page) {
-    this._current_page = page
-    this.selectPage.emit(page)
+    if(page <= this._pages.length && page > 0) {
+      this._current_page = page
+      this.selectPage.emit(page)
+    }
+
   }
 
   ngOnInit() {}
