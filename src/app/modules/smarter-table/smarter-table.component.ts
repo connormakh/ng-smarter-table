@@ -55,11 +55,18 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     this._page_size = value
   }
 
+  @Input()
+  public on_edit: Function;
+
+  @Input()
+  public on_delete: Function;
+
   constructor() {}
 
   ngOnInit() {}
 
   ngOnChanges() {
+    // checkForAction()
     this._columns && this._rows ? this.matchDataToColumns() : console.log('no rows or cols')
   }
 
@@ -179,6 +186,15 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     this._current_page = page
     this.matchDataToColumns()
   }
+
+  // checkForAction() {
+  //   if(this._can_delete || this._can_edit) {
+  //     this._columns.concat({type: 'nofilter', name: 'Action', binder: 'action'})
+  //     this._rows.map(item => {
+  //       item['action'] = 'editdelete'
+  //     })
+  //   }
+  // }
 
 
 }

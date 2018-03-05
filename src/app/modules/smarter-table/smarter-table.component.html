@@ -21,9 +21,14 @@
         <input type="{{column.type}}" placeholder="search.." [(ngModel)]="column['filter']" (keyup)="runFilter()">
       </ng-template>
     </td>
+    <td *ngIf="_can_delete || _can_edit">Actions</td>
   </tr>
   <tr *ngFor="let row of data">
     <td *ngFor="let item of row">{{item}}</td>
+    <td *ngIf="_can_edit || _can_delete">
+      <button *ngIf="_can_edit" (click)="on_edit">Edit</button>
+      <button *ngIf="_can_delete" (click)="on_delete">Delete</button>
+    </td>
   </tr>
   </tbody></table>
 <pagination *ngIf="_pagination && _pages > 1" (selectPage)="onSelectPage($event)" [pages]="_pages" ></pagination>

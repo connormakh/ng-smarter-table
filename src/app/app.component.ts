@@ -22,4 +22,12 @@ export class AppComponent {
     {nums: 5, strs: 'xyooyog', nums2: 65, nums3: 39, nums4: 155},
     {nums: 5, strs: 'yooyoge', nums2: 3, nums3: 45, nums4: 955}
   ]
+
+  editfn() {
+    console.log('editPressed')
+  }
+
+  deletefn() {
+    console.log('deletePressed')
+  }
 }
