@@ -1,3 +1,4 @@
+<button (click)="exportToExcel()" > Export to excel </button>
 <table class="table">
   <thead>
   <tr>
@@ -25,3 +26,4 @@
     <td *ngFor="let item of row">{{item}}</td>
   </tr>
   </tbody></table>
+<pagination *ngIf="_pagination && _pages > 1" (selectPage)="onSelectPage($event)" [pages]="_pages" ></pagination>

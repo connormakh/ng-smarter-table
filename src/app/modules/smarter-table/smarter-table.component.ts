@@ -7,12 +7,20 @@ import {Component, OnInit, Input, OnChanges} from '@angular/core';
 })
 export class SmarterTableComponent implements OnInit, OnChanges {
 
-  _filter = true
-  _sort = true
+  _filter = false
+  _sort = false
   data = []
   _columns = []
   _rows = []
   _initial_rows = []
+
+  _can_edit = false
+  _can_delete = false
+  _page_size = 0
+  _pagination = false
+
+  _pages = 0
+  _current_page = 1
 
   @Input() set columns(vall) {
     this._columns = vall
@@ -31,11 +39,25 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     this._sort = value
   }
 
+  @Input() set can_edit(value: boolean) {
+    this._can_edit = value
+  }
+
+  @Input() set can_delete(value: boolean) {
+    this._can_delete = value
+  }
+
+  @Input() set pagination(value: boolean) {
+    this._pagination = value
+  }
+
+  @Input() set page_size(value: number) {
+    this._page_size = value
+  }
+
   constructor() {}
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   ngOnChanges() {
     this._columns && this._rows ? this.matchDataToColumns() : console.log('no rows or cols')
@@ -53,6 +75,11 @@ export class SmarterTableComponent implements OnInit, OnChanges {
       }
       return row
     })
+    if(this._pagination && this._page_size) {
+      let added = this.data.length % this._page_size ? 1 : 0
+      this._pages = Math.floor(this.data.length / this._page_size) + added
+      this.data = this.data.slice((this._current_page - 1) * this._page_size, ((this._current_page - 1) * this._page_size) + this._page_size )
+    }
   }
 
   runSort(type, is_negative, field) {
@@ -132,5 +159,26 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     }
     return cond
   }
+
+  exportToExcel() {
+    let csv_string = ''
+    for (let col of this._columns) {
+      csv_string += col.name + ","
+    }
+    csv_string += "\n"
+
+    for(let d of this.data) {
+      for (let r of d)
+        csv_string += r +","
+      csv_string += "\n"
+    }
+    // TODO SAVE AS FILE
+  }
+
+  onSelectPage(page) {
+    this._current_page = page
+    this.matchDataToColumns()
+  }
+
 
 }
