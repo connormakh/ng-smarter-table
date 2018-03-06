@@ -5,6 +5,7 @@ import {AngularFontAwesomeModule} from "angular-font-awesome";
 import {FormsModule} from "@angular/forms";
 import {PaginationComponent} from "./pagination.component";
 import {DownloadCsvService} from "./download-csv.service";
+import {InlineEditComponent} from "./inline-edit/inline-edit.component";
 
 @NgModule({
   imports: [
@@ -12,7 +13,7 @@ import {DownloadCsvService} from "./download-csv.service";
     FormsModule,
     AngularFontAwesomeModule
   ],
-  declarations: [SmarterTableComponent, PaginationComponent],
+  declarations: [SmarterTableComponent, PaginationComponent, InlineEditComponent],
   exports: [SmarterTableComponent],
   providers: [DownloadCsvService]
 })

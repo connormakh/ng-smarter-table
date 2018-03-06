@@ -21,6 +21,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   _pagination = false
   _inline_edit = false
   _inline_edit_groups = []
+  _inline_edit_row = -1
 
   _pages = 0
   _current_page = 1
@@ -79,6 +80,16 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   ngOnChanges() {
     // checkForAction()
     this._columns && this._rows ? this.matchDataToColumns() : console.log('no rows or cols')
+
+  }
+
+  editHandle(index) {
+    console.log(index)
+    console.log(this._inline_edit)
+    console.log(this._inline_edit_groups)
+    if(this._inline_edit && this._inline_edit_groups) {
+      this._inline_edit_row = index
+    }
   }
 
   matchDataToColumns() {
@@ -89,10 +100,15 @@ export class SmarterTableComponent implements OnInit, OnChanges {
         let index = this._columns.findIndex(item => {
           return item.binder == col
         })
-        row[index] = item[col]
+        row[index] = {value: item[col], inline_edit: this._inline_edit_groups.find(item_bind =>{
+          console.log(item_bind)
+          console.log(col)
+          return item_bind.binder == col
+          }  )}
       }
       return row
     })
+    console.log(this.data)
     if(this._pagination && this._page_size) {
       let added = this.data.length % this._page_size ? 1 : 0
       this._pages = Math.floor(this.data.length / this._page_size) + added
@@ -109,12 +125,6 @@ export class SmarterTableComponent implements OnInit, OnChanges {
         break
       case 'text':
         this._rows = this._rows.sort((a,b) => {
-
-          if(is_negative) {
-
-          } else {
-
-          }
           return is_negative ? (b[field].toLowerCase() > a[field].toLowerCase())?1:-1
             : (a[field].toLowerCase() >  b[field].toLowerCase()?1:-1)
         })

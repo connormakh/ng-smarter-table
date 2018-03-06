@@ -24,7 +24,15 @@ export class AppComponent {
   ]
 
   inline_edit_groups = [
-
+    {
+      binder: 'nums',
+      type: 'dropdown',
+      options: [1,2,3,4,5]
+    },
+    {
+      binder: 'strs',
+      type: 'text'
+    }
   ]
 
   editfn() {
