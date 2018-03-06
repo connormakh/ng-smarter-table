@@ -23,6 +23,10 @@ export class AppComponent {
     {nums: 5, strs: 'yooyoge', nums2: 3, nums3: 45, nums4: 955}
   ]
 
+  inline_edit_groups = [
+
+  ]
+
   editfn() {
     console.log('editPressed')
   }

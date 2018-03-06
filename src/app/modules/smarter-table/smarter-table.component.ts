@@ -1,4 +1,5 @@
 import {Component, OnInit, Input, OnChanges} from '@angular/core';
+import {DownloadCsvService} from "./download-csv.service";
 
 @Component({
   selector: 'smarter-table',
@@ -18,6 +19,8 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   _can_delete = false
   _page_size = 0
   _pagination = false
+  _inline_edit = false
+  _inline_edit_groups = []
 
   _pages = 0
   _current_page = 1
@@ -55,13 +58,21 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     this._page_size = value
   }
 
+  @Input() set inline_edit(value: boolean) {
+    this._inline_edit = value
+  }
+
+  @Input() set inline_edit_groups(value: any) {
+    this._inline_edit_groups = value
+  }
+
   @Input()
   public on_edit: Function;
 
   @Input()
   public on_delete: Function;
 
-  constructor() {}
+  constructor(private csv: DownloadCsvService) {}
 
   ngOnInit() {}
 
@@ -168,18 +179,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   }
 
   exportToExcel() {
-    let csv_string = ''
-    for (let col of this._columns) {
-      csv_string += col.name + ","
-    }
-    csv_string += "\n"
-
-    for(let d of this.data) {
-      for (let r of d)
-        csv_string += r +","
-      csv_string += "\n"
-    }
-    // TODO SAVE AS FILE
+    this.csv.download(this._columns, this._initial_rows, 'table')
   }
 
   onSelectPage(page) {

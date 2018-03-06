@@ -4,6 +4,7 @@ import { SmarterTableComponent } from './smarter-table.component';
 import {AngularFontAwesomeModule} from "angular-font-awesome";
 import {FormsModule} from "@angular/forms";
 import {PaginationComponent} from "./pagination.component";
+import {DownloadCsvService} from "./download-csv.service";
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import {PaginationComponent} from "./pagination.component";
     AngularFontAwesomeModule
   ],
   declarations: [SmarterTableComponent, PaginationComponent],
-  exports: [SmarterTableComponent]
+  exports: [SmarterTableComponent],
+  providers: [DownloadCsvService]
 })
 export class SmarterTableModule { }
