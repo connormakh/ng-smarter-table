@@ -27,15 +27,17 @@
     <td *ngFor="let item of row">
       <div *ngIf="_inline_edit_row == i && item.inline_edit && item.inline_edit.type; then inlineEditColumn; else standardColumn"></div>
       <ng-template #inlineEditColumn>
-        <inline-edit [type]="item.inline_edit.type"></inline-edit>
+        <inline-edit [options]="item.inline_edit.options" [type]="item.inline_edit.type"></inline-edit>
       </ng-template>
       <ng-template #standardColumn>
         {{item.value}}
       </ng-template>
     </td>
     <td *ngIf="_can_edit || _can_delete">
-      <button *ngIf="_can_edit" (click)="editHandle(i)">Edit</button>
-      <button *ngIf="_can_delete" (click)="on_delete">Delete</button>
+      <button *ngIf="_can_edit && _inline_edit_row != i" (click)="editHandle(i)">Edit</button>
+      <button *ngIf="_can_delete && _inline_edit_row != i" (click)="on_delete">Delete</button>
+      <button *ngIf="_inline_edit_row == i " (click)="on_save">Save</button>
+      <button *ngIf="_inline_edit_row == i " (click)="edit_cancel_wrapper()">Cancel</button>
     </td>
   </tr>
   </tbody></table>

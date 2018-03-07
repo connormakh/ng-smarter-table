@@ -73,6 +73,12 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   @Input()
   public on_delete: Function;
 
+  @Input()
+  public on_save: Function;
+
+  @Input()
+  public on_cancel: Function;
+
   constructor(private csv: DownloadCsvService) {}
 
   ngOnInit() {}
@@ -195,6 +201,11 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   onSelectPage(page) {
     this._current_page = page
     this.matchDataToColumns()
+  }
+
+  edit_cancel_wrapper() {
+    this._inline_edit_row = -1
+    this.on_cancel
   }
 
   // checkForAction() {
