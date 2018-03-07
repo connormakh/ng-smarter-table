@@ -79,6 +79,9 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   @Input()
   public on_cancel: () => any;
 
+  @Input()
+  public on_row_click: () => any;
+
   constructor(private csv: DownloadCsvService) {}
 
   ngOnInit() {}
@@ -218,6 +221,13 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   edit_delete_wrapper() {
     this._inline_edit_row = -1
     this.on_delete()
+  }
+
+  row_click_wrapper(index) {
+    if(index != this._inline_edit_row) {
+      console.log('clickedd')
+      this.on_row_click();
+    }
   }
 
   // checkForAction() {
