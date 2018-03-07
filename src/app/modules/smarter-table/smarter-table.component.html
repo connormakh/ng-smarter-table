@@ -24,13 +24,13 @@
     </td>
     <td *ngIf="_can_delete || _can_edit">Actions</td>
   </tr>
-  <tr *ngFor="let row of data; let i = index" (click)="row_click_wrapper(i)">
-    <td *ngFor="let item of row">
+  <tr *ngFor="let row of data; let i = index" >
+    <td *ngFor="let item of row" (click)="row_click_wrapper(i)">
       <div *ngIf="_inline_edit_row == i && item.inline_edit && item.inline_edit.type; then inlineEditColumn; else standardColumn"></div>
       <ng-template #inlineEditColumn>
         <inline-edit [options]="item.inline_edit.options" [type]="item.inline_edit.type"></inline-edit>
       </ng-template>
-      <ng-template #standardColumn>
+      <ng-template #standardColumn >
         {{item.value}}
       </ng-template>
     </td>
