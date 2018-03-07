@@ -1,11 +1,12 @@
-<button (click)="exportToExcel()" > Export to excel </button>
-<table class="table">
+<button (click)="exportToExcel()" class="btn-primary"> Export to excel </button>
+<table class="table table-striped">
   <thead>
   <tr>
     <th *ngFor="let column of _columns; let i = index" (click)="prepareSort(i)">{{column.name}}
       <i *ngIf="column['has_sort'] && column['sort_is_negative']" class="fa fa-long-arrow-down"></i>
       <i *ngIf="column['has_sort'] && !column['sort_is_negative']" class="fa fa-long-arrow-up"></i>
     </th>
+    <th *ngIf="_can_delete || _can_edit">Actions</th>
   </tr>
   </thead>
   <tbody>
@@ -13,12 +14,12 @@
     <td *ngFor="let column of _columns">
       <div *ngIf="column.type == 'number'; then numberBlock; else otherTemp"></div>
       <ng-template #numberBlock >
-        <input class="small-num" placeholder="min" type="number" [(ngModel)]="column['min_num']" (keyup)="runFilter()">
+        <input class="small-num form-control" placeholder="min" type="number" [(ngModel)]="column['min_num']" (keyup)="runFilter()">
         to
-        <input class="small-num" placeholder="max" type="number" [(ngModel)]="column['max_num']" (keyup)="runFilter()">
+        <input class="small-num form-control" placeholder="max" type="number" [(ngModel)]="column['max_num']" (keyup)="runFilter()">
       </ng-template>
       <ng-template #otherTemp>
-        <input type="{{column.type}}" placeholder="search.." [(ngModel)]="column['filter']" (keyup)="runFilter()">
+        <input type="{{column.type}}" class="form-control" placeholder="search.." [(ngModel)]="column['filter']" (keyup)="runFilter()">
       </ng-template>
     </td>
     <td *ngIf="_can_delete || _can_edit">Actions</td>
@@ -34,10 +35,10 @@
       </ng-template>
     </td>
     <td *ngIf="_can_edit || _can_delete">
-      <button *ngIf="_can_edit && _inline_edit_row != i" (click)="editHandle(i)">Edit</button>
-      <button *ngIf="_can_delete && _inline_edit_row != i" (click)="on_delete">Delete</button>
-      <button *ngIf="_inline_edit_row == i " (click)="on_save">Save</button>
-      <button *ngIf="_inline_edit_row == i " (click)="edit_cancel_wrapper()">Cancel</button>
+      <button *ngIf="_can_edit && _inline_edit_row != i" class="btn-success" (click)="editHandle(i)">Edit</button>
+      <button *ngIf="_can_delete && _inline_edit_row != i" class="btn-danger" (click)="edit_delete_wrapper()">Delete</button>
+      <button *ngIf="_inline_edit_row == i " class="btn-success" (click)="edit_save_wrapper()">Save</button>
+      <button *ngIf="_inline_edit_row == i " class="btn-primary" (click)="edit_cancel_wrapper()">Cancel</button>
     </td>
   </tr>
   </tbody></table>

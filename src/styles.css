@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 .small-num {
-  width: 50px;
+  width: 60px !important;
+  display:inline !important;
 }
 
 input {

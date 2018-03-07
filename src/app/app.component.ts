@@ -9,18 +9,28 @@ export class AppComponent {
   title = 'app';
 
   columns = [
-    {type: 'number', name: 'Cool Nums', binder: 'nums' },
-    {type: 'text', name: 'Cool Strings', binder: 'strs' },
-    {type: 'number', name: 'Cool Nums', binder: 'nums2' },
-    {type: 'number', name: 'Cool Nums', binder: 'nums3' },
-    {type: 'number', name: 'Cool Nums', binder: 'nums4' },
+    {type: 'text', name: 'First Name', binder: 'fname' },
+    {type: 'text', name: 'Last Name', binder: 'lname' },
+    {type: 'text', name: 'Date of birth', binder: 'dob' },
+    {type: 'number', name: 'numbers', binder: 'nums' },
+    {type: 'text', name: 'Gender', binder: 'gender' },
     ]
 
   rows = [
-    {nums: 5, strs: 'ayooyod', nums2: 33, nums3: 414, nums4: 535},
-    {nums: 5, strs: 'cyooyoa', nums2: 323, nums3: 4344, nums4: 255},
-    {nums: 5, strs: 'xyooyog', nums2: 65, nums3: 39, nums4: 155},
-    {nums: 5, strs: 'yooyoge', nums2: 3, nums3: 45, nums4: 955}
+    {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
+    {fname: "George", lname: 'Rattel', dob: '4/15/11996', nums: 4414, gender: "male"},
+    {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
+    {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
+    {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
+    {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
+    {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
+    {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
+    {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
+    {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
+    {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
+    {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
+    {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
+    {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
   ]
 
   inline_edit_groups = [

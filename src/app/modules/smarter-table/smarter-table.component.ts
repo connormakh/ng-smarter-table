@@ -68,16 +68,16 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   }
 
   @Input()
-  public on_edit: Function;
+  public on_edit: () => any;
 
   @Input()
-  public on_delete: Function;
+  public on_delete: () => any;
 
   @Input()
-  public on_save: Function;
+  public on_save: () => any;
 
   @Input()
-  public on_cancel: Function;
+  public on_cancel: () => any;
 
   constructor(private csv: DownloadCsvService) {}
 
@@ -95,6 +95,8 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     console.log(this._inline_edit_groups)
     if(this._inline_edit && this._inline_edit_groups) {
       this._inline_edit_row = index
+    } else {
+      this.on_edit
     }
   }
 
@@ -205,7 +207,17 @@ export class SmarterTableComponent implements OnInit, OnChanges {
 
   edit_cancel_wrapper() {
     this._inline_edit_row = -1
-    this.on_cancel
+    this.on_cancel()
+  }
+
+  edit_save_wrapper() {
+    this._inline_edit_row = -1
+    this.on_save()
+  }
+
+  edit_delete_wrapper() {
+    this._inline_edit_row = -1
+    this.on_delete()
   }
 
   // checkForAction() {

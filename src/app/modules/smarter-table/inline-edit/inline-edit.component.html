@@ -1,7 +1,7 @@
 <div [ngSwitch]="_type">
-  <input type="text" *ngSwitchCase="'text'">
-  <input type="number" *ngSwitchCase="'number'">
-  <select  *ngSwitchCase="'dropdown'">
+  <input type="text" class="form-control" *ngSwitchCase="'text'">
+  <input type="number" class="form-control" *ngSwitchCase="'number'">
+  <select class="form-control"  *ngSwitchCase="'dropdown'">
     <option *ngFor="let opt of _options">{{opt}}</option>
   </select>
 </div>
