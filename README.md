@@ -1,5 +1,7 @@
 # NgSmarterTable
 
+An Angular 5 smart table that handles filtering, sorting, inline editing, deleting, and more!
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.2.
 
 ## Development server

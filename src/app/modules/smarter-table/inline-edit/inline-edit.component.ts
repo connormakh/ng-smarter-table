@@ -5,7 +5,7 @@ import {Component, OnInit, Input, OnChanges, EventEmitter, Output} from '@angula
   templateUrl: './inline-edit.component.html'
   // styleUrls: ['./.component.scss']
 })
-export class InlineEditComponent implements OnInit, OnChanges {
+export class InlineEditComponent implements OnInit {
 
   _type = 'text'
   _options = []

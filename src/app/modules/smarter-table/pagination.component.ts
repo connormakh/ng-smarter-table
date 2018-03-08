@@ -7,7 +7,7 @@ import {Component, OnInit, Input, OnChanges, EventEmitter, Output} from '@angula
 })
 export class PaginationComponent implements OnInit, OnChanges {
 
-  _pages = 0
+  _pages = []
   _current_page = 1
 
   @Input() set pages(value: number) {
