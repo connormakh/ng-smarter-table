@@ -73,9 +73,61 @@ If not, add the following css links to your index.html in the root of your proje
   
   ## Additional Features
   
-  Smarter Table 
+  Smarter Table supports filtering, sorting, pagination, inline editing, and exporting to excel.
   
+  * Sorting:
+    Depending on the type given in the column, the sort will execute, whether a number or string
   
+  * Filtering:
+    Depending on the type given in the column, a filter can be used, whether number or string
+   
+  * Pagination:
+    Depending on a page length specified, different page sizes can be given
+  
+  * Export to Excel:
+    Speaks for itslef
+    
+  * Inline editing: 
+    If enabled, user can edit a record inline, while specifying a function in order to be run on save, in case of updating an external source. 
+    User is then urged to refresh data source
+  
+  ## Inputs
+  
+  | Attribute   | Type  | Default | Description      
+    | --- | --- | --- | --- |
+    | filter | Boolean | false | Whether or not to enable filter
+    | can_delete | Boolean | false | Whether or not to show a delete button 
+    | can_edit | Boolean | false | Whether or not to show a edit button 
+    | on_edit | Function | null | Function to be executed on edit click 
+    | on_delete | Function | null | A delete function to be executed when user clicks delete 
+    | inline_edit | Boolean | false | Whether or not a user should be able to inline edit on the table
+    | inline_edit_group | array | [] | Description of inline edit types to be used. Dropdown/text
+    | pagination | Boolean | false | Whether or not to enable pagination in the table
+    | page_size | Number | null | Page size in case pagination is enabled
+    | on_save | Function | null | Function be run on when a user clicks save for inline edit
+    | on_cancel | Function | null | Function be run on when a user clicks cancel for inline edit
+    | can_export | boolean | false | Whether or not data can be exported to excel
+
+   An example of inline_edit_group can be seen below:
+   ```typescript
+    inline_edit_groups = [
+        {
+          binder: 'nums',
+          type: 'dropdown',
+          options: [1,2,3,4,5]
+        },
+        {
+          binder: 'strs',
+          type: 'text'
+        }
+  ]
+    ```
+    
+## Example code
+Example code can be found in the [Smarter Table Module](https://github.com/connormakh/ng-smarter-table/tree/master/src/app/modules/smarter-table)    
+
+## Live Demo
+TODO
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.2.
 
