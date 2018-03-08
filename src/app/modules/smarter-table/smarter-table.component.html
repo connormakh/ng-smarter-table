@@ -1,4 +1,4 @@
-<button (click)="exportToExcel()" class="btn-primary"> Export to excel </button>
+<button *ngIf="_can_export" (click)="exportToExcel()" class="btn-primary"> Export to excel </button>
 <table class="table table-striped">
   <thead>
   <tr>

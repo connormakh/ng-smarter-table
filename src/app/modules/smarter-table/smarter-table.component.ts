@@ -22,6 +22,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   _inline_edit = false
   _inline_edit_groups = []
   _inline_edit_row = -1
+  _can_export = false
 
   _pages = 0
   _current_page = 1
@@ -63,9 +64,16 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     this._inline_edit = value
   }
 
+  @Input() set can_export(value: boolean) {
+    this._can_export= value
+  }
+
+
   @Input() set inline_edit_groups(value: any) {
     this._inline_edit_groups = value
   }
+
+
 
   @Input()
   public on_edit: () => any;

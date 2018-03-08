@@ -107,6 +107,7 @@ If not, add the following css links to your index.html in the root of your proje
     | on_save | Function | null | Function be run on when a user clicks save for inline edit
     | on_cancel | Function | null | Function be run on when a user clicks cancel for inline edit
     | can_export | boolean | false | Whether or not data can be exported to excel
+    | on_row_click | Function | null | Function to handle user row clicks
 
    An example of inline_edit_group can be seen below:
    ```typescript
