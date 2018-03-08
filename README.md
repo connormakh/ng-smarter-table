@@ -6,10 +6,12 @@ An Angular 5 smart table that handles filtering, sorting, inline editing, deleti
 
 For now, this table only supports bootstrap.
  
-* Make sure you have the bootstrap css installed in your project.
-If not, add the following css link to your index.html in the root of your project.
+* Make sure you have the bootstrap css, along with fontawesome installed in your project.
+If not, add the following css links to your index.html in the root of your project.
 
   As per the [Boostrap](https://getbootstrap.com/docs/3.3/getting-started/) Docs:
+  
+  As per the [FontAwesome](https://fontawesome.com/get-started/web-fonts-with-css) Docs:
 
   ```html
   <!-- index.html -->
@@ -17,6 +19,8 @@ If not, add the following css link to your index.html in the root of your projec
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
   integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
    crossorigin="anonymous">
+  <!-- fontawesome -->
+   <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet"> 
   ```
 * Add SmarterTableModule to your Module file:
   ```typescript
@@ -55,6 +59,7 @@ If not, add the following css link to your index.html in the root of your projec
   rows = [
     {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
     {fname: "George", lname: 'Rattel', dob: '4/15/11996', nums: 4414, gender: "male"},
+    {fname: "Sabrina", lname: 'Azar', dob: '16/1/1997', nums: 4414, gender: "female"},
   ]
   ```
   
@@ -62,7 +67,14 @@ If not, add the following css link to your index.html in the root of your projec
   
   | Attribute   |   Values | Description    
   | --- | --- | --- |
-  | type | text/number | Type of the column to be stored, used in identifying for sort and filter
+  | type | 'text'/'number' | Type of the column to be stored, used in identifying for sort and filter
+  | name | any | Name to be shown on column
+  | binder | any | Property name in row for this column to be bound to
+  
+  ## Additional Features
+  
+  Smarter Table 
+  
   
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.2.
