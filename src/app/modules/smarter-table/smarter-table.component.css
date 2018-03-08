@@ -1,3 +1,5 @@
+
+
 /* You can add global styles to this file, and also import other style files */
 .small-num {
   width: 60px !important;
@@ -6,4 +8,8 @@
 
 input {
   border: 0.5px gray;
+}
+
+*, button, a, p {
+  font-family: sans-serif;
 }
