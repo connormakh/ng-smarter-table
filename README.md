@@ -9,7 +9,7 @@ An Angular 5 smart table that handles filtering, sorting, inline editing, deleti
 
 For now, this table only supports bootstrap.
 
-## NPM
+### NPM
 ```sh
   npm install ng-smarter-table
 ```
