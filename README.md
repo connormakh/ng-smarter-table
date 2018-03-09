@@ -2,9 +2,6 @@
 
 An Angular 5 smart table that handles filtering, sorting, inline editing, deleting, and more!
 
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
-
 # Installation
 
 For now, this table only supports bootstrap.
