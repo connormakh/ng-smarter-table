@@ -25,7 +25,7 @@ If not, add the following css links to your index.html in the root of your proje
   integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
    crossorigin="anonymous">
   <!-- fontawesome -->
-   <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet"> 
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   ```
 * Add SmarterTableModule to your Module file:
   ```typescript
