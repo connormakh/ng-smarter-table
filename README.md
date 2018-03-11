@@ -5,6 +5,11 @@ An Angular 5 smart table that handles filtering, sorting, inline editing, deleti
 # Installation
 
 For now, this table only supports bootstrap.
+
+### NPM
+```sh
+  npm install ng-smarter-table
+```
  
 * Make sure you have the bootstrap css, along with fontawesome installed in your project.
 If not, add the following css links to your index.html in the root of your project.
