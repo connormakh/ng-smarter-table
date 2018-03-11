@@ -17,9 +17,9 @@ input {
   margin-right: 0 !important;
 }
 
-*, button, a, p {
-  font-family: sans-serif;
-}
+/**, button, a, p {*/
+  /*font-family: sans-serif;*/
+/*}*/
 
 .top-space {
   margin-top: 20px;

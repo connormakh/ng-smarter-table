@@ -9,11 +9,11 @@ export class AppComponent {
   title = 'app';
 
   columns = [
-    {type: 'text', name: 'First Name', binder: 'fname' },
-    {type: 'text', name: 'Last Name', binder: 'lname' },
-    {type: 'text', name: 'Date of birth', binder: 'dob' },
-    {type: 'number', name: 'numbers', binder: 'nums' },
-    {type: 'text', name: 'Gender', binder: 'gender' },
+    {type: 'text', visible: true, name: 'First Name', binder: 'fname' },
+    {type: 'text', visible: true, name: 'Last Name', binder: 'lname' },
+    {type: 'text', visible: true, name: 'Date of birth', binder: 'dob' },
+    {type: 'number', visible: true, name: 'numbers', binder: 'nums' },
+    {type: 'text', visible: true, name: 'Gender', binder: 'gender' },
     ]
 
   rows = [

@@ -2,18 +2,26 @@
   "bugs": {
     "url": "https://github.com/connormakh/ng-smarter-table/issues"
   },
-  "author": {"email": "connormakhlouta@gmail.com",
+  "author": {
+    "email": "connormakhlouta@gmail.com",
     "name": "Connor Makhlouta"
   },
   "homepage": "https://github.com/connormakh/ng-smarter-table",
   "description": "A comprehensive angular smart table",
-  "keywords": ["angular", "smart-table", "filter", "sort", "pagination", "bootstrap"],
+  "keywords": [
+    "angular",
+    "smart-table",
+    "filter",
+    "sort",
+    "pagination",
+    "bootstrap"
+  ],
   "name": "ng-smarter-table",
-  "repository":
-  { "type": "git"
-  , "url":  "https://github.com/connormakh/ng-smarter-table.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/connormakh/ng-smarter-table.git"
   },
-  "version": "0.0.7",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -40,7 +48,8 @@
     "core-js": "^2.4.1",
     "font-awesome": "^4.7.0",
     "rxjs": "^5.5.6",
-    "zone.js": "^0.8.19"
+    "zone.js": "^0.8.19",
+    "ng2-multiselect": "^1.0.2"
   },
   "devDependencies": {
     "@angular/cli": "~1.7.2",

@@ -6,8 +6,8 @@
                [page_size]="6"
                [sort]="true"
                [pagination]="true"
-               [on_delete]="deletefn()"
-               [on_edit]="editfn()"
+               (delete)="deletefn()"
+               (edit)="editfn()"
                [inline_edit]="true"
                [inline_edit_groups]="inline_edit_groups"
 ></smarter-table>

@@ -54,16 +54,16 @@ If not, add the following css links to your index.html in the root of your proje
   
   ```typescript
   columns = [
-      {type: 'text', name: 'First Name', binder: 'fname' },
-      {type: 'text', name: 'Last Name', binder: 'lname' },
-      {type: 'text', name: 'Date of birth', binder: 'dob' },
-      {type: 'number', name: 'numbers', binder: 'nums' },
-      {type: 'text', name: 'Gender', binder: 'gender' },
+      {type: 'text', visible: true, name: 'First Name', binder: 'fname' },
+      {type: 'text', visible: true, name: 'Last Name', binder: 'lname' },
+      {type: 'text', visible: true, name: 'Date of birth', binder: 'dob' },
+      {type: 'number', name: 'numbers', visible: true, binder: 'nums' },
+      {type: 'text', name: 'Gender', visible: true, binder: 'gender' },
     ]
   
   rows = [
     {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
-    {fname: "George", lname: 'Rattel', dob: '4/15/11996', nums: 4414, gender: "male"},
+    {fname: "George", lname: 'Rattel', dob: '14/5/1992', nums: 4414, gender: "male"},
     {fname: "Sabrina", lname: 'Azar', dob: '16/1/1997', nums: 4414, gender: "female"},
   ]
   ```
@@ -95,6 +95,9 @@ If not, add the following css links to your index.html in the root of your proje
   * Inline editing: 
     If enabled, user can edit a record inline, while specifying a function in order to be run on save, in case of updating an external source. 
     User is then urged to refresh data source
+    
+  * Filtering by column: 
+      User can set which columns are to be visible and which are not to be  
   
   ## Inputs
   
@@ -103,16 +106,23 @@ If not, add the following css links to your index.html in the root of your proje
     | filter | Boolean | false | Whether or not to enable filter
     | can_delete | Boolean | false | Whether or not to show a delete button 
     | can_edit | Boolean | false | Whether or not to show a edit button 
-    | on_edit | Function | null | Function to be executed on edit click 
-    | on_delete | Function | null | A delete function to be executed when user clicks delete 
     | inline_edit | Boolean | false | Whether or not a user should be able to inline edit on the table
     | inline_edit_group | array | [] | Description of inline edit types to be used. Dropdown/text
     | pagination | Boolean | false | Whether or not to enable pagination in the table
     | page_size | Number | null | Page size in case pagination is enabled
-    | on_save | Function | null | Function be run on when a user clicks save for inline edit
-    | on_cancel | Function | null | Function be run on when a user clicks cancel for inline edit
     | can_export | boolean | false | Whether or not data can be exported to excel
-    | on_row_click | Function | null | Function to handle user row clicks
+    | primary_action_name | string | "Edit"| Name of button to be set on primary btn. Note: this button still binds to the (edit) function
+    | secondary_action_name | string | "Delete"| Name of button to be set on secondary btn. Note: this button still binds to the (delete) function
+
+ ## Outputs
+  
+  | Attribute   | Type  | Default | Description      
+    | --- | --- | --- | --- |
+    | edit | Function | null | Function to be executed on edit click 
+    | delete | Function | null | A delete function to be executed when user clicks delete 
+    | save | Function | null | Function be run on when a user clicks save for inline edit
+    | cancel | Function | null | Function be run on when a user clicks cancel for inline edit
+    | row_click | Function | null | Function to handle user row clicks
 
    An example of inline_edit_group can be seen below:
    ```typescript
@@ -127,9 +137,10 @@ If not, add the following css links to your index.html in the root of your proje
           type: 'text'
         }
   ]
-    ```
+  
+   ```
     
-## Dependancies
+## Dependencies
    
    This project makes use of the [ng2-multiselect](https://www.npmjs.com/package/ng2-multiselect) library created by [preetham1290](https://www.npmjs.com/~preetham1290).
     

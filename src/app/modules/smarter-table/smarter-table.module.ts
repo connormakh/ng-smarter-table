@@ -6,12 +6,14 @@ import {FormsModule} from "@angular/forms";
 import {PaginationComponent} from "./pagination.component";
 import {DownloadCsvService} from "./download-csv.service";
 import {InlineEditComponent} from "./inline-edit/inline-edit.component";
+import { MultiselectDropdownModule } from 'ng2-multiselect';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    MultiselectDropdownModule
   ],
   declarations: [SmarterTableComponent, PaginationComponent, InlineEditComponent],
   exports: [SmarterTableComponent],
