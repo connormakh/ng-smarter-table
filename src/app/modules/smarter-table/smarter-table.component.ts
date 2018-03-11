@@ -169,6 +169,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   }
 
   runSort(type, is_negative, field) {
+    console.log(type, is_negative, field)
     switch (type) {
       case 'number':
         this._rows = this._rows.sort((a,b) => {
@@ -199,7 +200,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
 
     // TODO REVERT SORT TO ORIGINAL TABLE STRUC ON NO SORTS SELECTED
 
-    this.runSort( this._columns[index]['type'],
+    this.runSort( this._columns[index]['type'] ? this._columns[index]['type'] : 'text',
       this._columns[index]['sort_is_negative'],
       this._columns[index]['binder'])
   }
