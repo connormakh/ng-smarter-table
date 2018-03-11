@@ -66,6 +66,7 @@ If not, add the following css links to your index.html in the root of your proje
     {fname: "George", lname: 'Rattel', dob: '14/5/1992', nums: 4414, gender: "male"},
     {fname: "Sabrina", lname: 'Azar', dob: '16/1/1997', nums: 4414, gender: "female"},
   ]
+
   ```
   
   ### Column
@@ -112,11 +113,11 @@ If not, add the following css links to your index.html in the root of your proje
     | page_size | Number | null | Page size in case pagination is enabled
     | can_export | boolean | false | Whether or not data can be exported to excel
     | primary_action_name | string | "Edit"| Name of button to be set on primary btn. Note: this button still binds to the (edit) function
-    | secondary_action_name | string | "Delete"| Name of button to be set on secondary btn. Note: this button still binds to the (delete) function
+    | secondary_action_name | string | "Delete"| Name of button to be set on secondary btn. Note: this button still binds to the (delete) function  |
 
- ## Outputs
+  ## Outputs
   
-  | Attribute   | Type  | Default | Description      
+  | Attribute   | Type  | Default | Description  |    
     | --- | --- | --- | --- |
     | edit | Function | null | Function to be executed on edit click 
     | delete | Function | null | A delete function to be executed when user clicks delete 
