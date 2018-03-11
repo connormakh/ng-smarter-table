@@ -1,5 +1,5 @@
 <ng2-multiselect [options]="titles" [texts]="texts" [settings]="mySettings" [(ngModel)]="filterModel" (ngModelChange)="toggle($event)"></ng2-multiselect>
-<button *ngIf="_can_export" (click)="exportToExcel()" class="btn-primary"> Export to excel </button>
+<button *ngIf="_can_export" (click)="exportToExcel()" class="top-space btn-primary"> Export to excel </button>
 <table class="table table-striped">
   <thead>
   <tr>

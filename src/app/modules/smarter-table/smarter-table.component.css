@@ -5,11 +5,17 @@
   width: 60px !important;
   display:inline !important;
 }
-
+.action-col {
+  width: 200px !important;
+}
 input {
   border: 0.5px gray;
 }
 
 *, button, a, p {
   font-family: sans-serif;
+}
+
+.top-space {
+  margin-top: 20px;
 }
