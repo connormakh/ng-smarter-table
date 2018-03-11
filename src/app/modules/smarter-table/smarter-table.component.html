@@ -1,5 +1,8 @@
 <ng2-multiselect [options]="titles" [texts]="texts" [settings]="mySettings" [(ngModel)]="filterModel" (ngModelChange)="toggle($event)"></ng2-multiselect>
-<button *ngIf="_can_export" (click)="exportToExcel()" class="top-space btn-primary"> Export to excel </button>
+<div class="row no-h-margin">
+  <button *ngIf="_can_export" (click)="exportToExcel()" class="top-space btn-primary"> Export to excel </button>
+  <label>Enable Filter <input type="checkbox" [(ngModel)]="_filter" ></label>
+</div>
 <table class="table table-striped" [style.width]="tableWidth">
   <thead>
   <tr>

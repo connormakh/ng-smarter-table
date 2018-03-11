@@ -187,22 +187,22 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   }
 
   prepareSort(index) {
-    if(this._columns[index]['has_sort'] && this._columns[index]['sort_is_negative']) {
-      this._columns[index]['has_sort'] = false
-      this._columns[index]['sort_is_negative'] = false
+    if(this.listedColumns[index]['has_sort'] && this.listedColumns[index]['sort_is_negative']) {
+      this.listedColumns[index]['has_sort'] = false
+      this.listedColumns[index]['sort_is_negative'] = false
       return;
-    } else if (this._columns[index]['has_sort']) {
-      this._columns[index]['sort_is_negative'] = true
+    } else if (this.listedColumns[index]['has_sort']) {
+      this.listedColumns[index]['sort_is_negative'] = true
     } else {
-      this._columns[index]['has_sort'] = true
-      this._columns[index]['sort_is_negative'] = false
+      this.listedColumns[index]['has_sort'] = true
+      this.listedColumns[index]['sort_is_negative'] = false
     }
 
     // TODO REVERT SORT TO ORIGINAL TABLE STRUC ON NO SORTS SELECTED
 
-    this.runSort( this._columns[index]['type'] ? this._columns[index]['type'] : 'text',
-      this._columns[index]['sort_is_negative'],
-      this._columns[index]['binder'])
+    this.runSort( this.listedColumns[index]['type'] ? this.listedColumns[index]['type'] : 'text',
+      this.listedColumns[index]['sort_is_negative'],
+      this.listedColumns[index]['binder'])
   }
 
   runFilter() {
@@ -226,7 +226,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     let cond = true
     for(let f in filter) {
       if(typeof filter[f] == 'string') {
-        cond = cond && item[f].includes(filter[f])
+        cond = cond && (item[f]+"").toUpperCase().includes(filter[f].toUpperCase())
       } else {
         if(filter[f].min) {
           cond = cond && (parseInt(item[f]) > parseInt(filter[f].min))
