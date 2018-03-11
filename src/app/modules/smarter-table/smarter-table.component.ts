@@ -1,5 +1,6 @@
-import {Component, OnInit, Input, OnChanges} from '@angular/core';
+import {Component, OnInit, Input, OnChanges, Output, EventEmitter} from '@angular/core';
 import {DownloadCsvService} from "./download-csv.service";
+import {IMultiSelectSettings} from "ng2-multiselect";
 
 @Component({
   selector: 'smarter-table',
@@ -23,6 +24,18 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   _inline_edit_groups = []
   _inline_edit_row = -1
   _can_export = false
+  _inline_edit_groups_dynamic = false
+
+  filterModel = []
+  titles = []
+  listedColumns= []
+
+
+  mySettings: IMultiSelectSettings = {
+    keyToSelect: "binder", //Give empty for selecting whole object
+    lableToDisplay: "name",
+    isSimpleArray: false
+  };
 
   _pages = 0
   _current_page = 1
@@ -73,22 +86,22 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     this._inline_edit_groups = value
   }
 
+  @Input() set inline_edit_groups_dynamic(value: boolean) {
+    this._inline_edit_groups_dynamic = value
+  }
 
+  @Output() edit:EventEmitter<any> = new EventEmitter<any>();
+  @Output() remove:EventEmitter<any> = new EventEmitter<any>();
+  @Output() save:EventEmitter<any> = new EventEmitter<any>();
+  @Output() cancel:EventEmitter<any> = new EventEmitter<any>();
+  @Output() row_click:EventEmitter<any> = new EventEmitter<any>();
 
-  @Input()
-  public on_edit: () => any;
+  // @Input()
+  // public on_row_click: () => any;
 
-  @Input()
-  public on_delete: () => any;
+  // @Input()
+  // public inline_edit: (row) => any;
 
-  @Input()
-  public on_save: () => any;
-
-  @Input()
-  public on_cancel: () => any;
-
-  @Input()
-  public on_row_click: () => any;
 
   constructor(private csv: DownloadCsvService) {}
 
@@ -97,42 +110,41 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   ngOnChanges() {
     // checkForAction()
     this._columns && this._rows ? this.matchDataToColumns() : console.log('no rows or cols')
-
   }
 
-  editHandle(index) {
-    console.log(index)
-    console.log(this._inline_edit)
-    console.log(this._inline_edit_groups)
+  editHandle(item, index) {
     if(this._inline_edit && this._inline_edit_groups) {
       this._inline_edit_row = index
     } else {
-      this.on_edit
+      this.edit.emit({item, index})
     }
   }
 
   matchDataToColumns() {
     this.data = this._rows.map((item,i) => {
       item['index'] = i + 1
-      let row = new Array(this._columns.length)
+      let row = {row_data:new Array(this._columns.length), data: item}
       for (let col in item) {
         let index = this._columns.findIndex(item => {
-          return item.binder == col
+          return item.binder == col && item.visible
         })
-        row[index] = {value: item[col], inline_edit: this._inline_edit_groups.find(item_bind =>{
-          console.log(item_bind)
-          console.log(col)
-          return item_bind.binder == col
-          }  )}
+        row['row_data'][index] = {value: item[col], visible: true, inline_edit: this._inline_edit_groups.find(item_bind =>{
+            return item_bind.binder == col
+          }
+        )}
       }
       return row
     })
-    console.log(this.data)
     if(this._pagination && this._page_size) {
       let added = this.data.length % this._page_size ? 1 : 0
       this._pages = Math.floor(this.data.length / this._page_size) + added
       this.data = this.data.slice((this._current_page - 1) * this._page_size, ((this._current_page - 1) * this._page_size) + this._page_size )
     }
+    console.log(this._columns)
+    this.listedColumns = this._columns
+    this.titles = this._columns
+    this.filterModel = this.titleToSelect(this.listedColumns)
+
   }
 
   runSort(type, is_negative, field) {
@@ -167,8 +179,8 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     // TODO REVERT SORT TO ORIGINAL TABLE STRUC ON NO SORTS SELECTED
 
     this.runSort( this._columns[index]['type'],
-                  this._columns[index]['sort_is_negative'],
-                  this._columns[index]['binder'])
+      this._columns[index]['sort_is_negative'],
+      this._columns[index]['binder'])
   }
 
   runFilter() {
@@ -178,6 +190,8 @@ export class SmarterTableComponent implements OnInit, OnChanges {
       if(column.type == 'number' && (column.min_num || column.max_num)) {
         filter[column.binder] = {min: column.min_num, max: column.max_num}
       } else if(column.filter) {
+        console.log(column.filter)
+        console.log(column.binder)
         filter[column.binder] = column.filter
       }
     }
@@ -218,25 +232,33 @@ export class SmarterTableComponent implements OnInit, OnChanges {
 
   edit_cancel_wrapper() {
     this._inline_edit_row = -1
-    this.on_cancel()
+    this.cancel.emit()
   }
 
   edit_save_wrapper() {
     this._inline_edit_row = -1
-    this.on_save()
+    this.save.emit()
   }
 
-  edit_delete_wrapper() {
+  edit_delete_wrapper(data, index) {
     this._inline_edit_row = -1
-    this.on_delete()
+    this.remove.emit({data, index})
   }
 
   row_click_wrapper(index) {
     if(index != this._inline_edit_row) {
-      console.log('clickedd')
-      this.on_row_click();
+      this.row_click.emit();
     }
   }
+
+  // dynamic_inline_data(row) {
+  //   // match it to an input row
+  //   let formatted_row = {}
+  //   for (let [i, value] of this._columns.entries()) {
+  //     formatted_row[value.binder] = row[i]
+  //   }
+  //   return this.inline_edit(row)
+  // }
 
   // checkForAction() {
   //   if(this._can_delete || this._can_edit) {
@@ -247,5 +269,26 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   //   }
   // }
 
+  titleToSelect(titles) {
+    return titles.map((currentValue) => {
+      // Return element for new_array
+      return currentValue.visible ? currentValue.binder : null
+    })
+  }
 
+  toggle(event) {
+    console.log(event)
+    for(let i = 0; i< this._columns.length; i++) {
+      const item = this._columns[i]
+      if(event.includes(item.binder)) {
+        item.visible = true
+      } else {
+        item.visible = false
+      }
+      for(let row of this.data) {
+        if(row[i]) row[i].visible = item.visible
+      }
+    }
+
+  }
 }
