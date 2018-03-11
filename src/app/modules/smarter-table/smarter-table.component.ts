@@ -25,10 +25,19 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   _inline_edit_row = -1
   _can_export = false
   _inline_edit_groups_dynamic = false
+  _primary_action_name = "Edit"
+  _secondary_action_name = "Delete"
 
   filterModel = []
   titles = []
   listedColumns= []
+
+  tableWidth = '100%'
+
+  texts = {
+    checked: 'elected',
+    checkedPlural: 'selected'
+  }
 
 
   mySettings: IMultiSelectSettings = {
@@ -81,6 +90,14 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     this._can_export= value
   }
 
+  @Input() set primary_action_name(value: string) {
+    this._primary_action_name = value
+  }
+
+  @Input() set secondary_action_name(value: string) {
+    this._secondary_action_name = value
+  }
+
 
   @Input() set inline_edit_groups(value: any) {
     this._inline_edit_groups = value
@@ -121,12 +138,13 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   }
 
   matchDataToColumns() {
+    this.listedColumns = this._columns.filter(item=>item.visible)
     this.data = this._rows.map((item,i) => {
       item['index'] = i + 1
-      let row = {row_data:new Array(this._columns.length), data: item}
+      let row = {row_data:new Array(this.listedColumns.length), data: item}
       for (let col in item) {
-        let index = this._columns.findIndex(item => {
-          return item.binder == col && item.visible
+        let index = this.listedColumns.findIndex(item => {
+          return item.binder == col
         })
         row['row_data'][index] = {value: item[col], visible: true, inline_edit: this._inline_edit_groups.find(item_bind =>{
             return item_bind.binder == col
@@ -140,10 +158,13 @@ export class SmarterTableComponent implements OnInit, OnChanges {
       this._pages = Math.floor(this.data.length / this._page_size) + added
       this.data = this.data.slice((this._current_page - 1) * this._page_size, ((this._current_page - 1) * this._page_size) + this._page_size )
     }
-    console.log(this._columns)
-    this.listedColumns = this._columns
     this.titles = this._columns
     this.filterModel = this.titleToSelect(this.listedColumns)
+    this.tableWidth = 200 * (this._columns.filter(item => item.visible).length) + 'px'
+
+    // this.toggle(this._columns.filter(item=>item.visible)
+    //   .map(item2=>item2.binder))
+    // this.toggle(this._columns.filter(item=>item.visible))
 
   }
 
@@ -190,8 +211,6 @@ export class SmarterTableComponent implements OnInit, OnChanges {
       if(column.type == 'number' && (column.min_num || column.max_num)) {
         filter[column.binder] = {min: column.min_num, max: column.max_num}
       } else if(column.filter) {
-        console.log(column.filter)
-        console.log(column.binder)
         filter[column.binder] = column.filter
       }
     }
@@ -205,8 +224,6 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   applyFilter(filter, item) {
     let cond = true
     for(let f in filter) {
-      console.log(f)
-      console.log(filter)
       if(typeof filter[f] == 'string') {
         cond = cond && item[f].includes(filter[f])
       } else {
@@ -277,18 +294,19 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   }
 
   toggle(event) {
-    console.log(event)
     for(let i = 0; i< this._columns.length; i++) {
       const item = this._columns[i]
       if(event.includes(item.binder)) {
-        item.visible = true
+        this._columns[i].visible = true
       } else {
-        item.visible = false
+        this._columns[i].visible = false
       }
       for(let row of this.data) {
         if(row[i]) row[i].visible = item.visible
       }
     }
+    this.matchDataToColumns()
+
 
   }
 }

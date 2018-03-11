@@ -1,9 +1,9 @@
 <ng2-multiselect [options]="titles" [texts]="texts" [settings]="mySettings" [(ngModel)]="filterModel" (ngModelChange)="toggle($event)"></ng2-multiselect>
 <button *ngIf="_can_export" (click)="exportToExcel()" class="top-space btn-primary"> Export to excel </button>
-<table class="table table-striped">
+<table class="table table-striped" [style.width]="tableWidth">
   <thead>
   <tr>
-    <th *ngFor="let column of _columns; let i = index" (click)="prepareSort(i)">
+    <th *ngFor="let column of listedColumns; let i = index" (click)="prepareSort(i)">
       <div *ngIf="column.visible">
         {{column.name}}
         <i *ngIf="column['has_sort'] && column['sort_is_negative']" class="fa fa-long-arrow-down"></i>
@@ -15,23 +15,23 @@
   </thead>
   <tbody>
   <tr *ngIf="_filter">
-    <td *ngFor="let column of _columns">
-      <div *ngIf="column.visible">
-        <div *ngIf="column.type == 'number'; then numberBlock; else otherTemp"></div>
-        <ng-template #numberBlock >
-          <input class="small-num form-control" placeholder="min" type="number" [(ngModel)]="column['min_num']" (keyup)="runFilter()">
-          to
-          <input class="small-num form-control" placeholder="max" type="number" [(ngModel)]="column['max_num']" (keyup)="runFilter()">
-        </ng-template>
-        <ng-template #otherTemp>
-          <input type="{{column.type}}" class="form-control" placeholder="search.." [(ngModel)]="column['filter']" (keyup)="runFilter()">
-        </ng-template>
-      </div>
+    <td *ngFor="let column of listedColumns" [style.width]="'200px'">
+      <!--<div *ngIf="column.visible">-->
+      <div *ngIf="column.type == 'number'; then numberBlock; else otherTemp"></div>
+      <ng-template #numberBlock >
+        <input class="small-num form-control" placeholder="min" type="number" [(ngModel)]="column['min_num']" (keyup)="runFilter()">
+        to
+        <input class="small-num form-control" placeholder="max" type="number" [(ngModel)]="column['max_num']" (keyup)="runFilter()">
+      </ng-template>
+      <ng-template #otherTemp>
+        <input type="{{column.type}}" class="form-control" placeholder="search.." [(ngModel)]="column['filter']" (keyup)="runFilter()">
+      </ng-template>
+      <!--</div>-->
     </td>
     <td *ngIf="_can_delete || _can_edit">Actions</td>
   </tr>
   <tr *ngFor="let row of data; let i = index" >
-    <td *ngFor="let item of row.row_data" (click)="row_click_wrapper(row, i)">
+    <td *ngFor="let item of row.row_data" (click)="row_click_wrapper(row, i)" [style.width]="'200px'">
       <div *ngIf="item && item.visible">
         <div *ngIf="_inline_edit_row == i && item.inline_edit && item.inline_edit.type; then inlineEditColumn; else standardColumn"></div>
         <ng-template #inlineEditColumn>
@@ -50,8 +50,8 @@
       </div>
     </td>
     <td *ngIf="_can_edit || _can_delete" class="action-col">
-      <button *ngIf="_can_edit && _inline_edit_row != i" class="btn-success" (click)="editHandle(row, i)">Edit</button>
-      <button *ngIf="_can_delete && _inline_edit_row != i" class="btn-danger" (click)="edit_delete_wrapper(row, i)">Delete</button>
+      <button *ngIf="_can_edit && _inline_edit_row != i" class="btn-success" (click)="editHandle(row, i)">{{_primary_action_name}}</button>
+      <button *ngIf="_can_delete && _inline_edit_row != i" class="btn-danger" (click)="edit_delete_wrapper(row, i)">{{_secondary_action_name}}</button>
       <button *ngIf="_inline_edit_row == i " class="btn-success" (click)="edit_save_wrapper(row, i)">Save</button>
       <button *ngIf="_inline_edit_row == i " class="btn-primary" (click)="edit_cancel_wrapper(row, i)">Cancel</button>
     </td>
