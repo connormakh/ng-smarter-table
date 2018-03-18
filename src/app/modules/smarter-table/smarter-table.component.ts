@@ -131,7 +131,9 @@ export class SmarterTableComponent implements OnInit, OnChanges {
 
   editHandle(item, index) {
     if(this._inline_edit && this._inline_edit_groups) {
+
       this._inline_edit_row = index
+
     } else {
       this.edit.emit({item, index})
     }
@@ -146,10 +148,13 @@ export class SmarterTableComponent implements OnInit, OnChanges {
         let index = this.listedColumns.findIndex(item => {
           return item.binder == col
         })
-        row['row_data'][index] = {value: item[col], visible: true, inline_edit: this._inline_edit_groups.find(item_bind =>{
-            return item_bind.binder == col
-          }
-        )}
+        row['row_data'][index] = {value: item[col], col: col, visible: true,
+          inline_edit: this.checkInlineConditions(row,col)
+          // inline_edit: this._inline_edit_groups.find(item_bind =>{
+          //   return item_bind.binder == col
+          // }
+        // )
+        }
       }
       return row
     })
@@ -166,6 +171,39 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     //   .map(item2=>item2.binder))
     // this.toggle(this._columns.filter(item=>item.visible))
 
+  }
+
+  checkInlineConditions(row, col) {
+    let inline_obj = this._inline_edit_groups[col]
+    if(inline_obj && inline_obj['cases']) {
+      let new_inline = JSON.parse(JSON.stringify(inline_obj))
+      for(let obj of new_inline.cases) {
+        let conditions_array = obj.condition.split(" ")
+        switch (conditions_array[1]) {
+          case "==":
+            let compare_from = ""
+            let compare_to = ""
+
+            if(row.data[conditions_array[0]]) {
+              compare_from = row.data[conditions_array[0]]
+              if(conditions_array[2].charAt(0) == "'" && conditions_array[2].charAt(conditions_array[2].length - 1) == "'") {
+                compare_to = conditions_array[2].substring(1,conditions_array[2].length -1)
+              } else if(row[conditions_array[2]]) {
+                //todo
+              }
+
+              if(compare_from == compare_to) {
+                new_inline.options = obj.options
+                return new_inline
+              }
+            }
+        }
+
+      }
+      return inline_obj
+    } else {
+      return inline_obj
+    }
   }
 
   runSort(type, is_negative, field) {

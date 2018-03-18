@@ -18,7 +18,7 @@ export class AppComponent {
 
   rows = [
     {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
-    {fname: "George", lname: 'Rattel', dob: '4/15/11996', nums: 4414, gender: "male"},
+    {fname: "George", lname: 'Rattel', dob: '4/15/11996', nums: 4414, gender: "female"},
     {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
     {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
     {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
@@ -32,18 +32,39 @@ export class AppComponent {
     {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
     {fname: "Connor", lname: 'Makhlouta', dob: "24/5/1996", nums: 414, gender: "male"},
   ]
-
-  inline_edit_groups = [
-    {
-      binder: 'nums',
+  inline_edit_groups = {
+    nums: {
       type: 'dropdown',
-      options: [1,2,3,4,5]
+      options: [1,2,3,4,5],
+      cases: [
+        {
+          condition: "gender == 'female'",
+          options: [4, 3, 2, 2]
+        }
+      ]
     },
-    {
-      binder: 'strs',
+    strs: {
       type: 'text'
+
     }
-  ]
+  }
+  // inline_edit_groups = [
+  //   {
+  //     binder: 'nums',
+  //     type: 'dropdown',
+  //     options: [1,2,3,4,5],
+  //     cases: [
+  //       {
+  //         condition: "gender == 'female'",
+  //         options: [4, 3, 2, 2]
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     binder: 'strs',
+  //     type: 'text'
+  //   }
+  // ]
 
   editfn() {
     console.log('editPressed')
