@@ -8,6 +8,8 @@
                [pagination]="true"
                (delete)="deletefn()"
                (edit)="editfn()"
+               (save)="savefn($event)"
                [inline_edit]="true"
+               [danger]="'overlap'"
                [inline_edit_groups]="inline_edit_groups"
 ></smarter-table>

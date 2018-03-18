@@ -17,6 +17,10 @@ input {
   margin-right: 0 !important;
 }
 
+.red {
+  background-color: red !important;
+}
+
 /**, button, a, p {*/
   /*font-family: sans-serif;*/
 /*}*/

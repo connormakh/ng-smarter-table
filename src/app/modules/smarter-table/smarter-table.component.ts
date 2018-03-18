@@ -27,10 +27,12 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   _inline_edit_groups_dynamic = false
   _primary_action_name = "Edit"
   _secondary_action_name = "Delete"
+  _danger = ""
 
+  editing = {}
   filterModel = []
   titles = []
-  listedColumns= []
+  listedColumns = []
 
   tableWidth = '100%'
 
@@ -51,6 +53,10 @@ export class SmarterTableComponent implements OnInit, OnChanges {
 
   @Input() set columns(vall) {
     this._columns = vall
+  }
+
+  @Input() set danger(val) {
+    this._danger = val
   }
 
   @Input() set rows(value: any) {
@@ -87,7 +93,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   }
 
   @Input() set can_export(value: boolean) {
-    this._can_export= value
+    this._can_export = value
   }
 
   @Input() set primary_action_name(value: string) {
@@ -107,11 +113,11 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     this._inline_edit_groups_dynamic = value
   }
 
-  @Output() edit:EventEmitter<any> = new EventEmitter<any>();
-  @Output() remove:EventEmitter<any> = new EventEmitter<any>();
-  @Output() save:EventEmitter<any> = new EventEmitter<any>();
-  @Output() cancel:EventEmitter<any> = new EventEmitter<any>();
-  @Output() row_click:EventEmitter<any> = new EventEmitter<any>();
+  @Output() edit: EventEmitter<any> = new EventEmitter<any>();
+  @Output() remove: EventEmitter<any> = new EventEmitter<any>();
+  @Output() save: EventEmitter<any> = new EventEmitter<any>();
+  @Output() cancel: EventEmitter<any> = new EventEmitter<any>();
+  @Output() row_click: EventEmitter<any> = new EventEmitter<any>();
 
   // @Input()
   // public on_row_click: () => any;
@@ -120,9 +126,11 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   // public inline_edit: (row) => any;
 
 
-  constructor(private csv: DownloadCsvService) {}
+  constructor(private csv: DownloadCsvService) {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnChanges() {
     // checkForAction()
@@ -130,8 +138,8 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   }
 
   editHandle(item, index) {
-    if(this._inline_edit && this._inline_edit_groups) {
-
+    if (this._inline_edit && this._inline_edit_groups) {
+      this.editing = {}
       this._inline_edit_row = index
 
     } else {
@@ -140,28 +148,29 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   }
 
   matchDataToColumns() {
-    this.listedColumns = this._columns.filter(item=>item.visible)
-    this.data = this._rows.map((item,i) => {
+    this.listedColumns = this._columns.filter(item => item.visible)
+    this.data = this._rows.map((item, i) => {
       item['index'] = i + 1
-      let row = {row_data:new Array(this.listedColumns.length), data: item}
+      let row = {row_data: new Array(this.listedColumns.length), data: item}
       for (let col in item) {
         let index = this.listedColumns.findIndex(item => {
           return item.binder == col
         })
-        row['row_data'][index] = {value: item[col], col: col, visible: true,
-          inline_edit: this.checkInlineConditions(row,col)
+        row['row_data'][index] = {
+          value: item[col], col: col, visible: true,
+          inline_edit: this.checkInlineConditions(row, col)
           // inline_edit: this._inline_edit_groups.find(item_bind =>{
           //   return item_bind.binder == col
           // }
-        // )
+          // )
         }
       }
       return row
     })
-    if(this._pagination && this._page_size) {
+    if (this._pagination && this._page_size) {
       let added = this.data.length % this._page_size ? 1 : 0
       this._pages = Math.floor(this.data.length / this._page_size) + added
-      this.data = this.data.slice((this._current_page - 1) * this._page_size, ((this._current_page - 1) * this._page_size) + this._page_size )
+      this.data = this.data.slice((this._current_page - 1) * this._page_size, ((this._current_page - 1) * this._page_size) + this._page_size)
     }
     this.titles = this._columns
     this.filterModel = this.titleToSelect(this.listedColumns)
@@ -175,24 +184,24 @@ export class SmarterTableComponent implements OnInit, OnChanges {
 
   checkInlineConditions(row, col) {
     let inline_obj = this._inline_edit_groups[col]
-    if(inline_obj && inline_obj['cases']) {
+    if (inline_obj && inline_obj['cases']) {
       let new_inline = JSON.parse(JSON.stringify(inline_obj))
-      for(let obj of new_inline.cases) {
+      for (let obj of new_inline.cases) {
         let conditions_array = obj.condition.split(" ")
         switch (conditions_array[1]) {
           case "==":
             let compare_from = ""
             let compare_to = ""
 
-            if(row.data[conditions_array[0]]) {
+            if (row.data[conditions_array[0]]) {
               compare_from = row.data[conditions_array[0]]
-              if(conditions_array[2].charAt(0) == "'" && conditions_array[2].charAt(conditions_array[2].length - 1) == "'") {
-                compare_to = conditions_array[2].substring(1,conditions_array[2].length -1)
-              } else if(row[conditions_array[2]]) {
+              if (conditions_array[2].charAt(0) == "'" && conditions_array[2].charAt(conditions_array[2].length - 1) == "'") {
+                compare_to = conditions_array[2].substring(1, conditions_array[2].length - 1)
+              } else if (row[conditions_array[2]]) {
                 //todo
               }
 
-              if(compare_from == compare_to) {
+              if (compare_from == compare_to) {
                 new_inline.options = obj.options
                 return new_inline
               }
@@ -209,14 +218,14 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   runSort(type, is_negative, field) {
     switch (type) {
       case 'number':
-        this._rows = this._rows.sort((a,b) => {
-          return is_negative ? b[field] - a[field]  : a[field] - b[field]
+        this._rows = this._rows.sort((a, b) => {
+          return is_negative ? b[field] - a[field] : a[field] - b[field]
         })
         break
       case 'text':
-        this._rows = this._rows.sort((a,b) => {
-          return is_negative ? (b[field].toLowerCase() > a[field].toLowerCase())?1:-1
-            : (a[field].toLowerCase() >  b[field].toLowerCase()?1:-1)
+        this._rows = this._rows.sort((a, b) => {
+          return is_negative ? (b[field].toLowerCase() > a[field].toLowerCase()) ? 1 : -1
+            : (a[field].toLowerCase() > b[field].toLowerCase() ? 1 : -1)
         })
         break
     }
@@ -224,7 +233,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   }
 
   prepareSort(index) {
-    if(this.listedColumns[index]['has_sort'] && this.listedColumns[index]['sort_is_negative']) {
+    if (this.listedColumns[index]['has_sort'] && this.listedColumns[index]['sort_is_negative']) {
       this.listedColumns[index]['has_sort'] = false
       this.listedColumns[index]['sort_is_negative'] = false
       return;
@@ -237,7 +246,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
 
     // TODO REVERT SORT TO ORIGINAL TABLE STRUC ON NO SORTS SELECTED
 
-    this.runSort( this.listedColumns[index]['type'] ? this.listedColumns[index]['type'] : 'text',
+    this.runSort(this.listedColumns[index]['type'] ? this.listedColumns[index]['type'] : 'text',
       this.listedColumns[index]['sort_is_negative'],
       this.listedColumns[index]['binder'])
   }
@@ -246,9 +255,9 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     let filter = {}
     for (let column of this._columns) {
 
-      if(column.type == 'number' && (column.min_num || column.max_num)) {
+      if (column.type == 'number' && (column.min_num || column.max_num)) {
         filter[column.binder] = {min: column.min_num, max: column.max_num}
-      } else if(column.filter) {
+      } else if (column.filter) {
         filter[column.binder] = column.filter
       }
     }
@@ -261,14 +270,14 @@ export class SmarterTableComponent implements OnInit, OnChanges {
 
   applyFilter(filter, item) {
     let cond = true
-    for(let f in filter) {
-      if(typeof filter[f] == 'string') {
-        cond = cond && (item[f]+"").toUpperCase().includes(filter[f].toUpperCase())
+    for (let f in filter) {
+      if (typeof filter[f] == 'string') {
+        cond = cond && (item[f] + "").toUpperCase().includes(filter[f].toUpperCase())
       } else {
-        if(filter[f].min) {
+        if (filter[f].min) {
           cond = cond && (parseInt(item[f]) > parseInt(filter[f].min))
         }
-        if(filter[f].max) {
+        if (filter[f].max) {
           cond = cond && (parseInt(item[f]) < parseInt(filter[f].max))
         }
       }
@@ -290,9 +299,9 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     this.cancel.emit()
   }
 
-  edit_save_wrapper() {
+  edit_save_wrapper(data, editing, index) {
     this._inline_edit_row = -1
-    this.save.emit()
+    this.save.emit({data, editing, index})
   }
 
   edit_delete_wrapper(data, index) {
@@ -301,7 +310,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   }
 
   row_click_wrapper(index) {
-    if(index != this._inline_edit_row) {
+    if (index != this._inline_edit_row) {
       this.row_click.emit();
     }
   }
@@ -332,19 +341,21 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   }
 
   toggle(event) {
-    for(let i = 0; i< this._columns.length; i++) {
+    for (let i = 0; i < this._columns.length; i++) {
       const item = this._columns[i]
-      if(event.includes(item.binder)) {
+      if (event.includes(item.binder)) {
         this._columns[i].visible = true
       } else {
         this._columns[i].visible = false
       }
-      for(let row of this.data) {
-        if(row[i]) row[i].visible = item.visible
+      for (let row of this.data) {
+        if (row[i]) row[i].visible = item.visible
       }
     }
     this.matchDataToColumns()
+  }
 
-
+  checkForDanger(row, i) {
+    return this._danger && row.data[this._danger]
   }
 }

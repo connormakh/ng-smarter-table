@@ -33,17 +33,17 @@
     </td>
     <td *ngIf="_can_delete || _can_edit">Actions</td>
   </tr>
-  <tr *ngFor="let row of data; let i = index" >
+  <tr *ngFor="let row of data; let i = index" [ngClass]="{'red': checkForDanger(row,i) }" >
     <td *ngFor="let item of row.row_data" (click)="row_click_wrapper(row, i)" [style.width]="'200px'">
       <div *ngIf="item && item.visible">
         <div *ngIf="_inline_edit_row == i && item.inline_edit && item.inline_edit.type; then inlineEditColumn; else standardColumn"></div>
         <ng-template #inlineEditColumn>
           <div *ngIf="_inline_edit_groups_dynamic; then dynamicInlineEdit; else standardInlineEdit"></div>
           <ng-template #standardInlineEdit>
-            <inline-edit [options]="item.inline_edit.options" [type]="item.inline_edit.type"></inline-edit>
+            <inline-edit [(model)]="editing[item.col]" [options]="item.inline_edit.options" [type]="item.inline_edit.type"></inline-edit>
           </ng-template>
           <ng-template #dynamicInlineEdit>
-            <inline-edit [options]="dynamic_inline_data(row)" [type]="item.inline_edit.type"></inline-edit>
+            <inline-edit [(model)]="editing[item.col]" [options]="dynamic_inline_data(row)" [type]="item.inline_edit.type"></inline-edit>
           </ng-template>
 
         </ng-template>
@@ -55,7 +55,7 @@
     <td *ngIf="_can_edit || _can_delete" class="action-col">
       <button *ngIf="_can_edit && _inline_edit_row != i" class="btn-success" (click)="editHandle(row, i)">{{_primary_action_name}}</button>
       <button *ngIf="_can_delete && _inline_edit_row != i" class="btn-danger" (click)="edit_delete_wrapper(row, i)">{{_secondary_action_name}}</button>
-      <button *ngIf="_inline_edit_row == i " class="btn-success" (click)="edit_save_wrapper(row, i)">Save</button>
+      <button *ngIf="_inline_edit_row == i " class="btn-success" (click)="edit_save_wrapper(row, editing, i)">Save</button>
       <button *ngIf="_inline_edit_row == i " class="btn-primary" (click)="edit_cancel_wrapper(row, i)">Cancel</button>
     </td>
   </tr>

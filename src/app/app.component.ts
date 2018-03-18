@@ -73,4 +73,8 @@ export class AppComponent {
   deletefn() {
     console.log('deletePressed')
   }
+
+  savefn(event) {
+    console.log(event)
+  }
 }

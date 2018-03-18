@@ -9,20 +9,28 @@ export class InlineEditComponent implements OnInit {
 
   _type = 'text'
   _options = []
+  @Input() model;
+  @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
 
   @Input() set type(value: string) {
     this._type = value
   }
 
   @Input() set options(value: any) {
-    this._options= value
+    this._options = value
   }
 
 
-  constructor() {}
+  constructor() {
+  }
 
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
+
+  emitModelChange() {
+    this.modelChange.emit(this.model)
+  }
 
   // ngOnChanges() {
   //   switch (this._type) {
