@@ -57,6 +57,9 @@
       <button *ngIf="_can_delete && _inline_edit_row != i" class="btn-danger" (click)="edit_delete_wrapper(row, i)">{{_secondary_action_name}}</button>
       <button *ngIf="_inline_edit_row == i " class="btn-success" (click)="edit_save_wrapper(row, editing, i)">Save</button>
       <button *ngIf="_inline_edit_row == i " class="btn-primary" (click)="edit_cancel_wrapper(row, i)">Cancel</button>
+      <div *ngFor="let action of _actions; let j = index">
+        <button *ngIf="checkActionConditions(j, row)" (click)="action_click_handler(action.name, i, j)">{{action.name}}</button>
+      </div>
     </td>
   </tr>
   </tbody></table>

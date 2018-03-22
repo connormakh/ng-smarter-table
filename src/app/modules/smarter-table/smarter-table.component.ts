@@ -50,9 +50,14 @@ export class SmarterTableComponent implements OnInit, OnChanges {
 
   _pages = 0
   _current_page = 1
+  _actions = []
 
   @Input() set columns(vall) {
     this._columns = vall
+  }
+
+  @Input() set actions(vall) {
+    this._actions = vall
   }
 
   @Input() set danger(val) {
@@ -118,6 +123,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   @Output() save: EventEmitter<any> = new EventEmitter<any>();
   @Output() cancel: EventEmitter<any> = new EventEmitter<any>();
   @Output() row_click: EventEmitter<any> = new EventEmitter<any>();
+  @Output() action_click: EventEmitter<any> = new EventEmitter<any>();
 
   // @Input()
   // public on_row_click: () => any;
@@ -357,5 +363,52 @@ export class SmarterTableComponent implements OnInit, OnChanges {
 
   checkForDanger(row, i) {
     return this._danger && row.data[this._danger]
+  }
+
+  checkActionConditions(index, row) {
+    if(this._actions[index]) {
+      for (let obj of this._actions[index].cases) {
+        if(obj.condition.contains("||")) {
+          let cond = false
+          for (let ob of obj.condition.split("||")) {
+            let conditions = ob.split(" ")
+            cond = cond || this.evaluateCondition(conditions, row)
+          }
+          if (!cond) return false
+        } else {
+          if (!this.evaluateCondition(obj.condition.split(" ")), row) return false
+        }
+      }
+      return true
+    } else {
+      return false
+    }
+  }
+
+  action_click_handler(action_name, i, j) {
+    this.action_click.emit({action:action_name, row:i, action_index:j})
+  }
+
+  /**
+   *
+   * @param conditions: Array of operators: ["string","==","string2"]
+   * @returns {boolean}
+   */
+  evaluateCondition(conditions, row) {
+    switch (conditions[1]) {
+      case "==":
+        let compare_from = ""
+        let compare_to = ""
+
+        if (row.data[conditions_array[0]]) {
+          compare_from = row.data[conditions_array[0]]
+          if (conditions_array[2].charAt(0) == "'" && conditions_array[2].charAt(conditions_array[2].length - 1) == "'") {
+            compare_to = conditions_array[2].substring(1, conditions_array[2].length - 1)
+          } else if (row[conditions_array[2]]) {
+            //todo
+          }
+          return compare_from == compare_to
+        }
+    }
   }
 }

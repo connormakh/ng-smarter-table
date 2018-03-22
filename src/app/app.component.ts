@@ -48,6 +48,17 @@ export class AppComponent {
 
     }
   }
+
+  actions = [{
+    name: 'Inspection',
+    cases: [
+      {
+        condition: "type == 'hello'",
+        show: true
+      }
+    ]
+  }]
+
   // inline_edit_groups = [
   //   {
   //     binder: 'nums',
