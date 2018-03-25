@@ -88,4 +88,8 @@ export class AppComponent {
   savefn(event) {
     console.log(event)
   }
+
+  evaluateAction(event) {
+    console.log(event)
+  }
 }

@@ -9,6 +9,8 @@
                (delete)="deletefn()"
                (edit)="editfn()"
                (save)="savefn($event)"
+               [actions]="actions"
+               (action_click)="evaluateAction($event)"
                [inline_edit]="true"
                [danger]="'overlap'"
                [inline_edit_groups]="inline_edit_groups"
