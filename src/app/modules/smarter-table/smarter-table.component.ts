@@ -28,6 +28,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   _primary_action_name = "Edit"
   _secondary_action_name = "Delete"
   _danger = ""
+  _overlooking_headers = []
 
   editing = {}
   filterModel = []
@@ -41,6 +42,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     checkedPlural: 'selected'
   }
 
+  _actions = []
 
   mySettings: IMultiSelectSettings = {
     keyToSelect: "binder", //Give empty for selecting whole object
@@ -50,7 +52,8 @@ export class SmarterTableComponent implements OnInit, OnChanges {
 
   _pages = 0
   _current_page = 1
-  _actions = []
+
+  @Input() show_options = true
 
   @Input() set columns(vall) {
     this._columns = vall
@@ -79,6 +82,10 @@ export class SmarterTableComponent implements OnInit, OnChanges {
 
   @Input() set can_edit(value: boolean) {
     this._can_edit = value
+  }
+
+  @Input() set overlooking_headers(value: any) {
+    this._overlooking_headers = value
   }
 
   @Input() set can_delete(value: boolean) {
@@ -125,6 +132,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
   @Output() row_click: EventEmitter<any> = new EventEmitter<any>();
   @Output() action_click: EventEmitter<any> = new EventEmitter<any>();
 
+
   // @Input()
   // public on_row_click: () => any;
 
@@ -140,6 +148,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     // checkForAction()
+    console.log('changes')
     this._columns && this._rows ? this.matchDataToColumns() : console.log('no rows or cols')
   }
 
@@ -163,13 +172,15 @@ export class SmarterTableComponent implements OnInit, OnChanges {
           return item.binder == col
         })
         row['row_data'][index] = {
-          value: item[col], col: col, visible: true,
-          inline_edit: this.checkInlineConditions(row, col)
+          value: item[col], col: col, visible: true, columnIndex: index,
+          inline_edit: this.checkInlineConditions(row, col),
           // inline_edit: this._inline_edit_groups.find(item_bind =>{
           //   return item_bind.binder == col
           // }
           // )
         }
+        row['actions'] = this.checkActionConditions(row)
+
       }
       return row
     })
@@ -220,6 +231,7 @@ export class SmarterTableComponent implements OnInit, OnChanges {
       return inline_obj
     }
   }
+
 
   runSort(type, is_negative, field) {
     switch (type) {
@@ -315,9 +327,9 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     this.remove.emit({data, index})
   }
 
-  row_click_wrapper(index) {
+  row_click_wrapper(data, index) {
     if (index != this._inline_edit_row) {
-      this.row_click.emit();
+      this.row_click.emit({data, index});
     }
   }
 
@@ -365,50 +377,85 @@ export class SmarterTableComponent implements OnInit, OnChanges {
     return this._danger && row.data[this._danger]
   }
 
-  checkActionConditions(index, row) {
-    if(this._actions[index]) {
-      for (let obj of this._actions[index].cases) {
-        if(obj.condition.contains("||")) {
-          let cond = false
-          for (let ob of obj.condition.split("||")) {
-            let conditions = ob.split(" ")
-            cond = cond || this.evaluateCondition(conditions, row)
+  // checkActionConditions(index, row) {
+  //   if (this._actions[index]) {
+  //     for (let obj of this._actions[index].cases) {
+  //       let conditions_array = obj.condition.split(" ")
+  //       switch (conditions_array[1]) {
+  //         case "==":
+  //           let compare_from = ""
+  //           let compare_to = ""
+  //
+  //           if (row.data[conditions_array[0]]) {
+  //             compare_from = row.data[conditions_array[0]]
+  //             if (conditions_array[2].charAt(0) == "'" && conditions_array[2].charAt(conditions_array[2].length - 1) == "'") {
+  //               compare_to = conditions_array[2].substring(1, conditions_array[2].length - 1)
+  //             } else if (row[conditions_array[2]]) {
+  //               //todo
+  //             }
+  //
+  //             if (compare_from != compare_to) {
+  //               return false
+  //             }
+  //           }
+  //       }
+  //
+  //     }
+  //     return true
+  //   } else {
+  //     return false
+  //   }
+  //
+  // }
+
+  checkActionConditions(row) {
+    return this._actions.map(action => {
+      for (let obj of action.cases) {
+        let conditions_array = obj.condition.split(" ")
+        // console.log(conditions_array)
+        for(let i = 0; i< conditions_array.length; i++) {
+          let cond = conditions_array[i]
+          switch (cond) {
+            case "==":
+              let compare_from = ""
+              let compare_to = ""
+
+              if (row.data[conditions_array[i - 1]]) {
+                compare_from = row.data[conditions_array[i - 1]]
+                if (conditions_array[i + 1].charAt(0) == "'" && conditions_array[i + 1].charAt(conditions_array[i + 1].length - 1) == "'") {
+                  compare_to = conditions_array[i + 1].substring(1, conditions_array[i + 1].length - 1)
+                } else if (row[conditions_array[i + 1]]) {
+                  //todo
+                }
+                // console.log(compare_from == compare_to)
+                // console.log(conditions_array.includes("||"))
+                // console.log(!conditions_array.includes("&&"))
+
+                if(compare_from == compare_to && ((conditions_array.includes("||") && !conditions_array.includes("&&")) || (!conditions_array.includes("||") && !conditions_array.includes("&&")) )) {
+                  return {action: action, show: true}
+                }
+
+                if (compare_from != compare_to && conditions_array.includes("&&")) {
+                  return {action: action, show: false}
+                }
+              }
+              break
+            default:
+              break
+
           }
-          if (!cond) return false
-        } else {
-          if (!this.evaluateCondition(obj.condition.split(" ")), row) return false
+
         }
+
       }
-      return true
-    } else {
-      return false
-    }
+      return {action: action, show: false}
+    })
+
+
+
   }
 
-  action_click_handler(action_name, i, j) {
-    this.action_click.emit({action:action_name, row:i, action_index:j})
-  }
-
-  /**
-   *
-   * @param conditions: Array of operators: ["string","==","string2"]
-   * @returns {boolean}
-   */
-  evaluateCondition(conditions, row) {
-    switch (conditions[1]) {
-      case "==":
-        let compare_from = ""
-        let compare_to = ""
-
-        if (row.data[conditions_array[0]]) {
-          compare_from = row.data[conditions_array[0]]
-          if (conditions_array[2].charAt(0) == "'" && conditions_array[2].charAt(conditions_array[2].length - 1) == "'") {
-            compare_to = conditions_array[2].substring(1, conditions_array[2].length - 1)
-          } else if (row[conditions_array[2]]) {
-            //todo
-          }
-          return compare_from == compare_to
-        }
-    }
+  action_click_handler(action_name, i, j, row) {
+    this.action_click.emit({action: action_name, row_index: i, action_index: j, row: row})
   }
 }

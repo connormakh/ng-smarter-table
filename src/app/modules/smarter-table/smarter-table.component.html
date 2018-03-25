@@ -1,10 +1,13 @@
-<ng2-multiselect [options]="titles" [texts]="texts" [settings]="mySettings" [(ngModel)]="filterModel" (ngModelChange)="toggle($event)"></ng2-multiselect>
-<div class="row no-h-margin">
-  <button *ngIf="_can_export" (click)="exportToExcel()" class="top-space btn-primary"> Export to excel </button>
-  <label>Enable Filter <input type="checkbox" [(ngModel)]="_filter" ></label>
+<div class="row no-h-margin" *ngIf="show_options">
+  <ng2-multiselect [options]="titles" [texts]="texts" [settings]="mySettings" [(ngModel)]="filterModel" (ngModelChange)="toggle($event)"></ng2-multiselect>
+  <button *ngIf="_can_export" (click)="exportToExcel()" class="left-right-space btn-primary"> Export to excel </button>
+  <label class="left-right-space">Enable Filter <input type="checkbox" [(ngModel)]="_filter" ></label>
 </div>
 <table class="table table-striped" [style.width]="tableWidth">
   <thead>
+  <tr *ngIf="_overlooking_headers && _overlooking_headers.length">
+    <td *ngFor="let hed of _overlooking_headers"  [attr.colspan]="hed.colspan">{{hed.title}}</td>
+  </tr>
   <tr>
     <th *ngFor="let column of listedColumns; let i = index" (click)="prepareSort(i)">
       <div *ngIf="column.visible">
@@ -40,15 +43,20 @@
         <ng-template #inlineEditColumn>
           <div *ngIf="_inline_edit_groups_dynamic; then dynamicInlineEdit; else standardInlineEdit"></div>
           <ng-template #standardInlineEdit>
-            <inline-edit [(model)]="editing[item.col]" [options]="item.inline_edit.options" [type]="item.inline_edit.type"></inline-edit>
+            <inline-edit [(model)]="editing[item.col]" [value_field]="item.inline_edit.value_field" [view_field]="item.inline_edit.view_field" [options]="item.inline_edit.options" [type]="item.inline_edit.type"></inline-edit>
           </ng-template>
           <ng-template #dynamicInlineEdit>
-            <inline-edit [(model)]="editing[item.col]" [options]="dynamic_inline_data(row)" [type]="item.inline_edit.type"></inline-edit>
+            <inline-edit [value_field]="item.inline_edit.value_field" [view_field]="item.inline_edit.view_field" [(model)]="editing[item.col]" [options]="dynamic_inline_data(row)" [type]="item.inline_edit.type"></inline-edit>
           </ng-template>
 
         </ng-template>
         <ng-template #standardColumn >
-          {{item.value}}
+          <div [ngSwitch]="_columns[item.columnIndex].type">
+            <a *ngSwitchCase="'link'" href="{{item.value}}">Open link</a>
+            <input type="checkbox" [checked]="item.value" disabled *ngSwitchCase="'checkbox'">
+            <span *ngSwitchDefault>{{item.value}}</span>
+          </div>
+
         </ng-template>
       </div>
     </td>
@@ -57,8 +65,8 @@
       <button *ngIf="_can_delete && _inline_edit_row != i" class="btn-danger" (click)="edit_delete_wrapper(row, i)">{{_secondary_action_name}}</button>
       <button *ngIf="_inline_edit_row == i " class="btn-success" (click)="edit_save_wrapper(row, editing, i)">Save</button>
       <button *ngIf="_inline_edit_row == i " class="btn-primary" (click)="edit_cancel_wrapper(row, i)">Cancel</button>
-      <div *ngFor="let action of _actions; let j = index">
-        <button *ngIf="checkActionConditions(j, row)" (click)="action_click_handler(action.name, i, j)">{{action.name}}</button>
+      <div *ngFor="let action of row.actions; let j = index">
+        <button class="btn-info" *ngIf="action.show" (click)="action_click_handler(action.action.name, i, j,row)">{{action.action.name}}</button>
       </div>
     </td>
   </tr>
